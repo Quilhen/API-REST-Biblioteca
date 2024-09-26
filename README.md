@@ -2,6 +2,10 @@
 
 Este proyecto es una API REST para gestionar una biblioteca. Permite a los usuarios gestionar libros, realizar préstamos y devolverlos.
 
+## Autor
+**David González**
+* [LinkedIn](https://www.linkedin.com/in/davidgont)
+
 ## Tecnologías
 
 - Spring Boot
