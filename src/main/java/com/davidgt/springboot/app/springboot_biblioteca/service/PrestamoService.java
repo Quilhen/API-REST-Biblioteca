@@ -15,6 +15,16 @@ import com.davidgt.springboot.app.springboot_biblioteca.repository.LibroReposito
 import com.davidgt.springboot.app.springboot_biblioteca.repository.PrestamoRepository;
 import com.davidgt.springboot.app.springboot_biblioteca.repository.UsuarioRepository;
 
+/**
+ * Servicio que gestiona la lógica de negocio relacionada con los préstamos de libros.
+ * Proporciona métodos para crear, obtener, devolver y listar préstamos.
+ * 
+ * Interactúa con los repositorios PrestamoRepository, UsuarioRepository y LibroRepository
+ * para manejar las operaciones de préstamo en la base de datos.
+ * Utiliza PrestamoMapper para convertir entre entidades y DTOs.
+ * 
+ * @author David GT
+ */
 @Service
 public class PrestamoService {
 
@@ -30,10 +40,22 @@ public class PrestamoService {
     @Autowired
     private LibroRepository libroRepository;
 
+    /**
+     * Obtiene una lista de todos los préstamos en el sistema.
+     * 
+     * @return Lista de objetos PrestamoDto que representan los préstamos.
+     */
     public List<PrestamoDto> getAllPrestamos() {
         return prestamoMapper.toPrestamoDtoList(prestamoRepository.findAll());
     }
 
+    /**
+     * Obtiene los detalles de un préstamo específico por su ID.
+     * 
+     * @param id El ID del préstamo que se desea obtener.
+     * @return Un objeto PrestamoDto con los detalles del préstamo si es encontrado.
+     * @throws ResourceNotFoundException Si el préstamo no es encontrado.
+     */
     public PrestamoDto getPrestamoById(Long id) {
         Optional<Prestamo> prestamoOpt = prestamoRepository.findById(id);
 
@@ -45,6 +67,14 @@ public class PrestamoService {
 
     }
 
+    /**
+     * Crea un nuevo préstamo en el sistema.
+     * 
+     * @param prestamoDto El objeto PrestamoDto con los datos del préstamo a crear.
+     * @return El préstamo recién creado en formato PrestamoDto.
+     * @throws ResourceNotFoundException Si el usuario o el libro no existen, o si el usuario
+     * ya tiene demasiados préstamos o el libro no está disponible.
+     */
     public PrestamoDto crearPrestamo(PrestamoDto prestamoDto) {
         Prestamo prestamo = new Prestamo();
 
@@ -53,7 +83,7 @@ public class PrestamoService {
             throw new ResourceNotFoundException("El usuario no existe!");
         }
 
-        if(usuarioOpt.get().getPrestamos().size() >= 3){
+        if (usuarioOpt.get().getPrestamos().size() >= 3) {
             throw new ResourceNotFoundException("No puedes tener mas de 4 libros prestados!");
         }
 
@@ -62,7 +92,7 @@ public class PrestamoService {
             throw new ResourceNotFoundException("El libro no existe!");
         }
 
-        if(!libroOpt.get().isDisponibilidad()){
+        if (!libroOpt.get().isDisponibilidad()) {
             throw new ResourceNotFoundException("El libro ya esta prestado!");
         }
 
@@ -80,6 +110,13 @@ public class PrestamoService {
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
     }
 
+    /**
+     * Marca un préstamo como devuelto.
+     * 
+     * @param id El ID del préstamo que se desea marcar como devuelto.
+     * @return El préstamo actualizado en formato PrestamoDto.
+     * @throws ResourceNotFoundException Si el préstamo no es encontrado.
+     */
     public PrestamoDto devolverPrestamo(Long id) {
         Optional<Prestamo> prestamoOpt = prestamoRepository.findById(id);
 

@@ -26,6 +26,15 @@ import com.davidgt.springboot.app.springboot_biblioteca.service.LibroService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
+/**
+ * Controlador REST para gestionar las operacion relacionadas con libros.
+ * Ofrece endpoints para crear, obtener, actualizar y eliminar libros en la biblioteca.
+ * 
+ * Esta clase interactua con el servicio LibroService para manejar la logica de negocio.
+ * 
+ * @author David GT
+ */
+
 @RestController
 @RequestMapping("/api/libros")
 public class LibroController {
@@ -33,12 +42,28 @@ public class LibroController {
     @Autowired
     private LibroService libroService;
 
+    /**
+     * Obtiene una lista de todos los libros paginada.
+     * 
+     * @return Una página con una lista de objetos LibroDto que representa los libros disponibles.
+     */
     @GetMapping
     public Page<LibroDto> getAllLibros() {
         return libroService.getAllLibros(0, 10);
 
     }
 
+    /**
+     * Obtiene una lista paginada de libros que cumplen con ciertos filtros.
+     * 
+     * @param titulo Titulo del libro (opcional).
+     * @param autor Autor del libro (opcional).
+     * @param fechaPublicacion Fecha de publicación del libro en formato ISO (yyyy-MM-dd) (opcional).
+     * @param genero Genero del libro (opcional).
+     * @param page Número de página para la paginación (por defecto es 0)
+     * @param size Tamaño de la página (por defecto es 10).
+     * @return Una pagina con una lista de libros filtados.
+     */
     @GetMapping("/librosFiltros")
     public Page<Libro> obtenerLibrosConFiltros(
         @Parameter(description = "Titulo del libro")
@@ -64,24 +89,50 @@ public class LibroController {
 
     }
 
+    /**
+     * Obtiene un libro por su ID.
+     * 
+     * @param id El id del libro que se quiere buscar.
+     * @return Un objeto LibroDto que representa el libro si es encontrado.
+     * 
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getLibroById(@PathVariable Long id) {
         LibroDto libro = libroService.getLibroById(id);
         return ResponseEntity.status(HttpStatus.OK).body(libro);
     }
 
+    /**
+     * Crea un nuevo libro en la biblioteca.
+     * 
+     * @param libroDto El objeto LibroDto con los datos del libro a crear.
+     * @return El libro recién creado en formato LibroDto.
+     */
     @PostMapping
     public ResponseEntity<?> crearLibro(@Valid @RequestBody LibroDto libroDto) {
         LibroDto libro = libroService.crearLibro(libroDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(libro);
     }
 
+    /**
+     * Actualiza los datos de un libro existente.
+     * 
+     * @param libroDto El objeto LibroDto con los datos actualizados.
+     * @param id El ID del libro a actualizar.
+     * @return El libro actualizado en formato LibroDto.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarLibro(@Valid @RequestBody LibroDto libroDto, @PathVariable Long id) {
         LibroDto libro = libroService.actualizarLibro(libroDto, id);
         return ResponseEntity.status(HttpStatus.OK).body(libro);
     }
 
+    /**
+     * Elimina un libro de la biblioteca por su ID.
+     * 
+     * @param id El ID del libro a eliminar.
+     * @return El libro eliminado en formato LibroDto.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminearLibro(@PathVariable Long id) {
         LibroDto libro = libroService.eliminarLibro(id);
