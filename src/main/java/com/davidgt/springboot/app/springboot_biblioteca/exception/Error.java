@@ -18,6 +18,7 @@ import java.util.Date;
  * Utilizada por el ControllerExceptionHandler para construir las respuestas de error.
  * 
  * @see ControllerExceptionHandler
+ * @author David GT
  */
 @Getter @Setter 
 @NoArgsConstructor

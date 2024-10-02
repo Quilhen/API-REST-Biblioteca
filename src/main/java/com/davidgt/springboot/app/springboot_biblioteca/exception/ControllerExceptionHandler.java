@@ -20,7 +20,7 @@ import org.springframework.web.context.request.WebRequest;
  * 
  * @see ResourceNotFoundException
  * @see Error
- * 
+ * @author David GT
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {

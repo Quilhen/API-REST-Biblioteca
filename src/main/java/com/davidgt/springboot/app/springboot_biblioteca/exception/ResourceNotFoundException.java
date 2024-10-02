@@ -8,6 +8,7 @@ package com.davidgt.springboot.app.springboot_biblioteca.exception;
  * entidad en la base de datos, y es manejada por ControllerExceptionHandler.
  * 
  * @see ControllerExceptionHandler
+ * @author David GT
  */
 public class ResourceNotFoundException extends RuntimeException{
 
