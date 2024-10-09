@@ -17,7 +17,10 @@ import com.davidgt.springboot.app.springboot_biblioteca.dto.UsuarioDto;
 import com.davidgt.springboot.app.springboot_biblioteca.entity.Usuario;
 import com.davidgt.springboot.app.springboot_biblioteca.service.UsuarioService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(name = "Usuarios", description = "Operaciones relacionadas con los usuarios.")
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 

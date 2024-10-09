@@ -24,6 +24,7 @@ import com.davidgt.springboot.app.springboot_biblioteca.entity.Libro;
 import com.davidgt.springboot.app.springboot_biblioteca.service.LibroService;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 /**
@@ -36,6 +37,7 @@ import jakarta.validation.Valid;
  */
 
 @RestController
+@Tag(name = "Libros", description = "Operaciones relacionadas con los libros.")
 @RequestMapping("/api/libros")
 public class LibroController {
 

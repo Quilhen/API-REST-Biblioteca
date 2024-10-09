@@ -15,6 +15,7 @@ import java.util.List;
 import com.davidgt.springboot.app.springboot_biblioteca.dto.PrestamoDto;
 import com.davidgt.springboot.app.springboot_biblioteca.service.PrestamoService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 /**
@@ -28,6 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/prestamos")
+@Tag(name = "Prestamos", description = "Operaciones relacionadas con los prestamos.")
 public class PrestamoController {
 
     @Autowired
