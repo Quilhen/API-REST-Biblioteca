@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.time.LocalDate;
 
 import com.davidgt.springboot.app.springboot_biblioteca.dto.LibroDto;
@@ -43,7 +45,9 @@ public class LibroService {
      * @param size Tamaño de la página (cantidad de libros por página).
      * @return Una página con los objetos LibroDto.
      */
-    public Page<LibroDto> getAllLibros(int page, int size) {
+    public Page<LibroDto> getAllLibros(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Libro> librosPage = libroRepository.findAll(pageable);

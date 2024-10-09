@@ -48,9 +48,10 @@ public class LibroController {
      * @return Una página con una lista de objetos LibroDto que representa los libros disponibles.
      */
     @GetMapping
-    public Page<LibroDto> getAllLibros() {
-        return libroService.getAllLibros(0, 10);
-
+    public Page<LibroDto> getAllLibros(
+        @RequestParam(defaultValue = "0") int page, 
+        @RequestParam(defaultValue = "10") int size){
+        return libroService.getAllLibros(page, size);
     }
 
     /**

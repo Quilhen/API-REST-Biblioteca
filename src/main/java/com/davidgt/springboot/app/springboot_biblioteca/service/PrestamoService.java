@@ -1,6 +1,7 @@
 package com.davidgt.springboot.app.springboot_biblioteca.service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,6 +128,7 @@ public class PrestamoService {
         Prestamo prestamo = prestamoOpt.get();
         prestamo.getLibro().setDisponibilidad(true);
         prestamo.getLibro().setUsuario(null);
+        prestamo.setFechaDevolucion(LocalDate.now());
         prestamoRepository.save(prestamo);
 
         return prestamoMapper.prestamoToPrestamoDto(prestamo);

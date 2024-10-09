@@ -75,7 +75,7 @@ public class PrestamoController {
      * @return El préstamo actualizado en formato PrestamoDto.
      */
     @PutMapping("/{id}/devolver")
-    public ResponseEntity<?> devolverPrestamo(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> devolverPrestamo( @PathVariable Long id) {
         PrestamoDto prestamo = prestamoService.devolverPrestamo(id);
         return ResponseEntity.status(HttpStatus.OK).body(prestamo);
     }

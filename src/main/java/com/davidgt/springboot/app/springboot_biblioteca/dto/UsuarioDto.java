@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -17,8 +18,9 @@ public class UsuarioDto {
 
     private Long id;
 
+    @Column(unique = true)
     @NotNull
-    private String nombre;
+    private String nombreUsuario;
 
     @NotNull
     @Email

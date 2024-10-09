@@ -8,13 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name="prestamos")
 @Getter @Setter @NoArgsConstructor @EqualsAndHashCode
 public class Prestamo {
 
@@ -30,10 +31,8 @@ public class Prestamo {
     @JoinColumn(name = "libro_id")
     private Libro libro;
 
-    @NotNull
     private LocalDate fechaPrestamo;
 
-    @NotNull
     private LocalDate fechaDevolucion;
     
 

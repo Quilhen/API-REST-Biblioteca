@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.davidgt.springboot.app.springboot_biblioteca.dto.PrestamoDto;
 import com.davidgt.springboot.app.springboot_biblioteca.dto.UsuarioDto;
+import com.davidgt.springboot.app.springboot_biblioteca.entity.Usuario;
 import com.davidgt.springboot.app.springboot_biblioteca.service.UsuarioService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -30,23 +29,22 @@ public class UsuarioController {
         return usuarioService.getAllUsuarios();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUsuarioById(@PathVariable Long id) {
-        UsuarioDto usuario =  usuarioService.getUsuarioById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(usuario);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> crearUsuario(@Valid @RequestBody UsuarioDto usuarioDto) {
-        UsuarioDto usuario =  usuarioService.crearUsuario(usuarioDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
-    }
-
     @GetMapping("/{id}/prestamos")
     public ResponseEntity<?> getUsuariosPrestamosActivos(@PathVariable Long id) {
         List<PrestamoDto> prestamos = usuarioService.getUsuariosPrestamos(id);
         return ResponseEntity.status(HttpStatus.OK).body(prestamos);
- 
+
+    }
+
+    @PostMapping
+    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
+    }
+
+    @PostMapping("/registrarse")
+    public ResponseEntity<?> registro(@RequestBody Usuario usuario) {
+        usuario.setAdmin(false);
+        return crearUsuario(usuario);
     }
 
 }
