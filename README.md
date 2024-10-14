@@ -28,5 +28,5 @@ spring.datasource.password=tu_contraseña_mysql
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 # Otras configuraciones
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=create
 spring.jpa.show-sql=true
