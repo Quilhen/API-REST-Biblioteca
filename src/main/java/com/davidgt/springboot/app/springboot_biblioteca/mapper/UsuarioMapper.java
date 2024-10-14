@@ -11,7 +11,7 @@ import com.davidgt.springboot.app.springboot_biblioteca.entity.Usuario;
 public interface UsuarioMapper {
 
     UsuarioDto usuarioToUsuarioDto(Usuario usuario);
-    Usuario usuarioDtoToUsuario(Usuario usuario);
+    Usuario usuarioDtoToUsuario(UsuarioDto usuarioDto);
 
     List<UsuarioDto> toUsuarioDtoList(List<Usuario> usuario);
     List<Usuario> toUsuarioList(List<UsuarioDto> usuarioDto);

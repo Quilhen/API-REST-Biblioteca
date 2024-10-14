@@ -36,10 +36,9 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests((authz) -> authz
-                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/usuarios").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll() 
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/registrarse").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/libros").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers(
                     "/v3/api-docs/**",
                                 "/doc/swagger-ui/**",

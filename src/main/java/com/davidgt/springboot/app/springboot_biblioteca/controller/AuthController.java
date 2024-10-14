@@ -16,10 +16,20 @@ import com.davidgt.springboot.app.springboot_biblioteca.dto.AuthRequestDto;
 import com.davidgt.springboot.app.springboot_biblioteca.dto.AuthResponseDto;
 import com.davidgt.springboot.app.springboot_biblioteca.service.JwtUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+
+/**
+ * Controlador REST para la autenticación de usuarios.
+ * Este controlador gestiona el inicio de sesión de los usuarios y genera el token JWT.
+ * 
+ * @author David GT
+ */
 @RestController
-@Tag(name = "Login", description = "Aqui se realiza el login.")
+@Tag(name = "Login", description = "Aquí se realiza el login.")
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -29,21 +39,34 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    /**
+     * Endpoint para realizar el login de un usuario.
+     * El usuario debe proporcionar un nombre de usuario y contraseña válidos para obtener un token JWT.
+     * 
+     * @param authRequestDto Objeto que contiene las credenciales del usuario (nombre de usuario y contraseña).
+     * @return Una respuesta que contiene el token JWT si las credenciales son válidas.
+     */
+    @Operation(summary = "Login de usuario", description = "Autentica al usuario y genera un token JWT.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login exitoso, se devuelve el token JWT"),
+        @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequestDto authRequestDto) {
         try {
-            // Autenticamos al usuario con su nombre de usuario y contraseña
+            // Autentica al usuario con su nombre de usuario y contraseña
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDto.getNombreUsuario(),
                             authRequestDto.getPassword()));
 
-            // Establecer la autenticación en el contexto de seguridad
+            // Establece la autenticación en el contexto de seguridad
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Generar el token JWT
+            // Genera el token JWT
             String jwtToken = jwtUtil.generateToken(authentication);
 
-            // Devolver el token en la respuesta
+            // Devuelve el token en la respuesta
             return ResponseEntity.ok(new AuthResponseDto(jwtToken));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
