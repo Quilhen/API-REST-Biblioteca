@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
 /**
@@ -53,7 +54,7 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequestDto authRequestDto) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDto authRequestDto) {
         try {
             // Autentica al usuario con su nombre de usuario y contraseña
             Authentication authentication = authenticationManager.authenticate(
