@@ -58,11 +58,11 @@ public class UsuarioController {
 
     
     /**
-     * Endpoint para obtener los préstamos activos de un usuario específico por su ID.
+     * Endpoint para obtener los préstamos de un usuario específico por su ID.
      * Requiere autenticación con rol ADMIN.
      * 
      * @param id El ID del usuario.
-     * @return Lista de préstamos activos del usuario.
+     * @return Lista de préstamos del usuario.
      */
     @Operation(summary = "Obtener préstamos activos de un usuario", description = "Devuelve la lista de préstamos activos de un usuario específico.", 
                security = @SecurityRequirement(name = "bearerAuth"))

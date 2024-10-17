@@ -70,6 +70,7 @@ public class PrestamoService {
 
     /**
      * Crea un nuevo préstamo en el sistema.
+     * El usuario no puede tener mas de 4 libros prestados a la vez.
      * 
      * @param prestamoDto El objeto PrestamoDto con los datos del préstamo a crear.
      * @return El préstamo recién creado en formato PrestamoDto.
@@ -130,6 +131,10 @@ public class PrestamoService {
         prestamo.getLibro().setUsuario(null);
         prestamo.setFechaDevolucion(LocalDate.now());
         prestamoRepository.save(prestamo);
+
+        Usuario usuario = prestamo.getUsuario();
+        usuario.getPrestamos().remove(prestamo);
+        usuarioRepository.save(usuario);
 
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
 

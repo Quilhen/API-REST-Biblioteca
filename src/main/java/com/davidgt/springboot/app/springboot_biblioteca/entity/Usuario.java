@@ -59,8 +59,7 @@ public class Usuario {
 
     private boolean activado;
 
-    @Transient // Especifica que es propia de la clase y no de persistencia (No esta mapeada a
-               // la BD)
+    @Transient // Especifica que es propia de la clase y no de persistencia (No esta mapeada a la BD)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean admin;
 
