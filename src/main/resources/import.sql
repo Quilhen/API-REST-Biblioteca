@@ -13,7 +13,7 @@ insert into libros(titulo, autor, anio_publicacion, genero, disponibilidad) valu
 insert into libros(titulo, autor, anio_publicacion, genero, disponibilidad) values('Don Quijote de la Mancha', 'Miguel de Cervantes', '1605-01-01', 'Novela de aventuras', true );
 insert into libros(titulo, autor, anio_publicacion, genero, disponibilidad) values('El retrato de Dorian Gray', 'Oscar Wilde', '1890-09-20', 'Ciencia ficcion', true );
 
-insert into prestamos(usuario_id, libro_id, fecha_prestamo, fecha_devolucion) values (1, 1, '2024-10-8', '2024,10,16');
+insert into prestamos(usuario_id, libro_id, fecha_prestamo, fecha_devolucion_prevista, estado) values (1, 1, '2024-10-19', '2024,10,20', 'ACTIVO');
 
 
 

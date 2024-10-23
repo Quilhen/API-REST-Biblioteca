@@ -1,42 +1,21 @@
-package com.davidgt.springboot.app.springboot_biblioteca.entity;
+package com.davidgt.springboot.app.springboot_biblioteca.dto;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.davidgt.springboot.app.springboot_biblioteca.entity.EstadoPrestamo;
+import com.davidgt.springboot.app.springboot_biblioteca.entity.Libro;
+import com.davidgt.springboot.app.springboot_biblioteca.entity.Usuario;
 
-@Entity
-@Table(name = "prestamos")
+public class HistorialPrestamoDto extends PrestamoDto {
 
-public class Prestamo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "libro_id")
     private Libro libro;
-
     private LocalDate fechaPrestamo;
-    private LocalDate fechaDevolucionPrevista; //Fecha prevista de devolución.
-
-    @Enumerated(EnumType.STRING)
-    private EstadoPrestamo estado = EstadoPrestamo.ACTIVO;
-
-    public Prestamo() {
-    }
+    private LocalDate fechaDevolucionPrevista;
+    private LocalDate fechaDevolucion;
+    private double multa;
+    private EstadoPrestamo estadoFinal;
 
     public Long getId() {
         return id;
@@ -70,6 +49,30 @@ public class Prestamo {
         this.fechaPrestamo = fechaPrestamo;
     }
 
+    public LocalDate getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public void setFechaDevolucion(LocalDate fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public double getMulta() {
+        return multa;
+    }
+
+    public void setMulta(double multa) {
+        this.multa = multa;
+    }
+
+    public EstadoPrestamo getEstadoFinal() {
+        return estadoFinal;
+    }
+
+    public void setEstadoFinal(EstadoPrestamo estadoFinal) {
+        this.estadoFinal = estadoFinal;
+    }
+
     public LocalDate getFechaDevolucionPrevista() {
         return fechaDevolucionPrevista;
     }
@@ -78,23 +81,19 @@ public class Prestamo {
         this.fechaDevolucionPrevista = fechaDevolucionPrevista;
     }
 
-    public EstadoPrestamo getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoPrestamo estado) {
-        this.estado = estado;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
         result = prime * result + ((libro == null) ? 0 : libro.hashCode());
         result = prime * result + ((fechaPrestamo == null) ? 0 : fechaPrestamo.hashCode());
-        result = prime * result + ((fechaDevolucionPrevista == null) ? 0 : fechaDevolucionPrevista.hashCode());
+        result = prime * result + ((fechaDevolucion == null) ? 0 : fechaDevolucion.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(multa);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((estadoFinal == null) ? 0 : estadoFinal.hashCode());
         return result;
     }
 
@@ -102,11 +101,11 @@ public class Prestamo {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Prestamo other = (Prestamo) obj;
+        HistorialPrestamoDto other = (HistorialPrestamoDto) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -127,10 +126,14 @@ public class Prestamo {
                 return false;
         } else if (!fechaPrestamo.equals(other.fechaPrestamo))
             return false;
-        if (fechaDevolucionPrevista == null) {
-            if (other.fechaDevolucionPrevista != null)
+        if (fechaDevolucion == null) {
+            if (other.fechaDevolucion != null)
                 return false;
-        } else if (!fechaDevolucionPrevista.equals(other.fechaDevolucionPrevista))
+        } else if (!fechaDevolucion.equals(other.fechaDevolucion))
+            return false;
+        if (Double.doubleToLongBits(multa) != Double.doubleToLongBits(other.multa))
+            return false;
+        if (estadoFinal != other.estadoFinal)
             return false;
         return true;
     }

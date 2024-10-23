@@ -1,7 +1,6 @@
 package com.davidgt.springboot.app.springboot_biblioteca.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +39,9 @@ public class PrestamoService {
 
     @Autowired
     private LibroRepository libroRepository;
+
+    @Autowired
+    private HistorialPrestamoService historialPrestamoService;
 
     /**
      * Obtiene una lista de todos los préstamos en el sistema.
@@ -86,7 +88,7 @@ public class PrestamoService {
         }
 
         if (usuarioOpt.get().getPrestamos().size() >= 3) {
-            throw new ResourceNotFoundException("No puedes tener mas de 4 libros prestados!");
+            throw new ResourceNotFoundException("No puedes tener mas de 3 libros prestados!");
         }
 
         Optional<Libro> libroOpt = libroRepository.findById(prestamoDto.getLibro().getId());
@@ -106,9 +108,10 @@ public class PrestamoService {
         prestamo.setUsuario(usuario);
         prestamo.setLibro(libro);
         prestamo.setFechaPrestamo(LocalDate.now());
-        prestamo.setFechaDevolucion(LocalDate.now().plusDays(7));
-
+        //prestamo.setFechaDevolucionPrevista(LocalDate.now().plusDays(7));
+        prestamo.setFechaDevolucionPrevista(LocalDate.now().minusDays(1));
         prestamoRepository.save(prestamo);
+
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
     }
 
@@ -129,13 +132,33 @@ public class PrestamoService {
         Prestamo prestamo = prestamoOpt.get();
         prestamo.getLibro().setDisponibilidad(true);
         prestamo.getLibro().setUsuario(null);
-        prestamo.setFechaDevolucion(LocalDate.now());
-        prestamoRepository.save(prestamo);
 
-        Usuario usuario = prestamo.getUsuario();
-        usuario.getPrestamos().remove(prestamo);
-        usuarioRepository.save(usuario);
+        historialPrestamoService.crearHistorialPrestamo(prestamo);
 
+        prestamoRepository.delete(prestamo);
+        return prestamoMapper.prestamoToPrestamoDto(prestamo);
+
+    }
+
+
+     /**
+     * Marca un préstamo como perdido.
+     * 
+     * @param id El ID del préstamo que se desea marcar como perdido.
+     * @return El préstamo actualizado en formato PrestamoDto.
+     * @throws ResourceNotFoundException Si el préstamo no es encontrado.
+     */
+    public PrestamoDto cambiarEstado(Long id){
+        Optional<Prestamo> prestamoOpt = prestamoRepository.findById(id);
+
+        if (!prestamoOpt.isPresent()) {
+            throw new ResourceNotFoundException("No existe el prestamo con el id: " + id);
+        }
+
+        Prestamo prestamo = prestamoOpt.get();
+        prestamo.setEstado(EstadoPrestamo.PERDIDO);
+        historialPrestamoService.crearHistorialPrestamo(prestamo);
+        prestamoRepository.delete(prestamo);
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
 
     }

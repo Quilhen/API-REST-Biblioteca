@@ -39,6 +39,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll() 
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/registrarse").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/prestamos/crearPrestamo").permitAll()
                 .requestMatchers(
                     "/v3/api-docs/**",
                                 "/doc/swagger-ui/**",

@@ -26,7 +26,8 @@ import jakarta.validation.Valid;
 /**
  * Controlador REST para gestionar las operaciones relacionadas con préstamos.
  * Ofrece endpoints para crear, obtener, devolver y listar todos los préstamos.
- * Esta clase interactúa con el servicio PrestamoService para manejar la lógica de negocio.
+ * Esta clase interactúa con el servicio PrestamoService para manejar la lógica
+ * de negocio.
  * 
  * @author David GT
  */
@@ -38,18 +39,16 @@ public class PrestamoController {
     @Autowired
     private PrestamoService prestamoService;
 
-
-     /**
+    /**
      * Endpoint para obtener una lista de todos los préstamos en el sistema.
      * Requiere autenticación con rol ADMIN.
      * 
      * @return Lista de objetos PrestamoDto que representan los préstamos.
      */
-    @Operation(summary = "Obtener todos los préstamos", description = "Devuelve una lista de todos los préstamos registrados.", 
-               security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Obtener todos los préstamos", description = "Devuelve una lista de todos los préstamos registrados.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de préstamos obtenida con éxito"),
-        @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
+            @ApiResponse(responseCode = "200", description = "Lista de préstamos obtenida con éxito"),
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -64,13 +63,12 @@ public class PrestamoController {
      * @param id El ID del préstamo que se desea buscar.
      * @return Un objeto PrestamoDto con los detalles del préstamo si es encontrado.
      */
-    @Operation(summary = "Obtener un préstamo por ID", description = "Devuelve los detalles de un préstamo específico por su ID.", 
-               security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Obtener un préstamo por ID", description = "Devuelve los detalles de un préstamo específico por su ID.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Préstamo obtenido con éxito"),
-        @ApiResponse(responseCode = "404", description = "Préstamo no encontrado"),
-        @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
-    })       
+            @ApiResponse(responseCode = "200", description = "Préstamo obtenido con éxito"),
+            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado"),
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
+    })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getPrestamoById(@PathVariable Long id) {
@@ -85,11 +83,10 @@ public class PrestamoController {
      * @param prestamoDto El objeto PrestamoDto con los datos del préstamo a crear.
      * @return El préstamo recién creado en formato PrestamoDto.
      */
-    @Operation(summary = "Crear un nuevo préstamo", description = "Crea un nuevo préstamo en el sistema.", 
-               security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Crear un nuevo préstamo", description = "Crea un nuevo préstamo en el sistema.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Préstamo creado con éxito"),
-        @ApiResponse(responseCode = "403", description = "No tienes permisos para crear un préstamo")
+            @ApiResponse(responseCode = "201", description = "Préstamo creado con éxito"),
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para crear un préstamo")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -98,24 +95,44 @@ public class PrestamoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(prestamo);
     }
 
-     /**
+    /**
      * Endpoint para marcar un préstamo como devuelto.
      * Requiere autenticación con rol ADMIN.
      * 
      * @param id El ID del préstamo que se desea marcar como devuelto.
      * @return El préstamo actualizado en formato PrestamoDto.
      */
-    @Operation(summary = "Marcar préstamo como devuelto", description = "Marca un préstamo existente como devuelto.", 
-               security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Marcar préstamo como devuelto", description = "Marca un préstamo existente como devuelto.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Préstamo devuelto con éxito"),
-        @ApiResponse(responseCode = "403", description = "No tienes permisos para devolver un préstamo"),
-        @ApiResponse(responseCode = "404", description = "Préstamo no encontrado")
+            @ApiResponse(responseCode = "200", description = "Préstamo devuelto con éxito"),
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para devolver un préstamo"),
+            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/devolver")
-    public ResponseEntity<?> devolverPrestamo( @PathVariable Long id) {
+    public ResponseEntity<?> devolverPrestamo(@PathVariable Long id) {
         PrestamoDto prestamo = prestamoService.devolverPrestamo(id);
+        return ResponseEntity.status(HttpStatus.OK).body(prestamo);
+    }
+
+
+    /**
+     * Endpoint para marcar un préstamo como perdido.
+     * Requiere autenticación con rol ADMIN.
+     * 
+     * @param id El ID del préstamo que se desea marcar como perdido.
+     * @return El préstamo actualizado en formato PrestamoDto.
+     */
+    @Operation(summary = "Marcar préstamo como perdido", description = "Marca un préstamo existente como perdido.", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Estado del préstamo cambiado con éxito"),
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para cambiar el estado del préstamo"),
+            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/perdido")
+    public ResponseEntity<?> cambiarEstado( @PathVariable Long id) {
+        PrestamoDto prestamo = prestamoService.cambiarEstado(id);
         return ResponseEntity.status(HttpStatus.OK).body(prestamo);
     }
 

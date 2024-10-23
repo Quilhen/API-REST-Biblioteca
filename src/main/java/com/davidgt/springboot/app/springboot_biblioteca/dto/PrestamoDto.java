@@ -2,6 +2,7 @@ package com.davidgt.springboot.app.springboot_biblioteca.dto;
 
 import java.time.LocalDate;
 
+import com.davidgt.springboot.app.springboot_biblioteca.entity.EstadoPrestamo;
 import com.davidgt.springboot.app.springboot_biblioteca.entity.Libro;
 import com.davidgt.springboot.app.springboot_biblioteca.entity.Usuario;
 
@@ -11,7 +12,8 @@ public class PrestamoDto {
     private Usuario usuario;
     private Libro libro;
     private LocalDate fechaPrestamo;
-    private LocalDate fechaDevolucion;
+    private LocalDate fechaDevolucionPrevista;
+    private EstadoPrestamo estado;
 
     public PrestamoDto() {
     }
@@ -48,13 +50,22 @@ public class PrestamoDto {
         this.fechaPrestamo = fechaPrestamo;
     }
 
-    public LocalDate getFechaDevolucion() {
-        return fechaDevolucion;
+    public LocalDate getfechaDevolucionPrevista() {
+        return fechaDevolucionPrevista;
     }
 
-    public void setFechaDevolucion(LocalDate fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
+    public void setfechaDevolucionPrevista(LocalDate fechaDevolucionPrevista) {
+        this.fechaDevolucionPrevista = fechaDevolucionPrevista;
     }
+
+    public EstadoPrestamo getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoPrestamo estado) {
+        this.estado = estado;
+    }
+
 
     @Override
     public int hashCode() {
@@ -64,7 +75,7 @@ public class PrestamoDto {
         result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
         result = prime * result + ((libro == null) ? 0 : libro.hashCode());
         result = prime * result + ((fechaPrestamo == null) ? 0 : fechaPrestamo.hashCode());
-        result = prime * result + ((fechaDevolucion == null) ? 0 : fechaDevolucion.hashCode());
+        result = prime * result + ((fechaDevolucionPrevista == null) ? 0 : fechaDevolucionPrevista.hashCode());
         return result;
     }
 
@@ -97,14 +108,13 @@ public class PrestamoDto {
                 return false;
         } else if (!fechaPrestamo.equals(other.fechaPrestamo))
             return false;
-        if (fechaDevolucion == null) {
-            if (other.fechaDevolucion != null)
+        if (fechaDevolucionPrevista == null) {
+            if (other.fechaDevolucionPrevista != null)
                 return false;
-        } else if (!fechaDevolucion.equals(other.fechaDevolucion))
+        } else if (!fechaDevolucionPrevista.equals(other.fechaDevolucionPrevista))
             return false;
         return true;
     }
-
 
     
 }

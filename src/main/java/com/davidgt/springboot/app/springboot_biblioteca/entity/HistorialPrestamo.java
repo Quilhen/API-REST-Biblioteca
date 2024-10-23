@@ -13,9 +13,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "prestamos")
-
-public class Prestamo {
+@Table(name = "historial_prestamos")
+public class HistorialPrestamo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,14 +28,18 @@ public class Prestamo {
     @JoinColumn(name = "libro_id")
     private Libro libro;
 
+    // Fecha del dia en el que se crea el prestamo
     private LocalDate fechaPrestamo;
-    private LocalDate fechaDevolucionPrevista; //Fecha prevista de devolución.
+
+    // Fecha prevista en la que deberia de devolverse el libro.
+    private LocalDate fechaDevolucionPrevista;
+
+    // Fecha del dia la cual el cliente devuelve el libro.
+    private LocalDate fechaDevolucion;
+    private double multa;
 
     @Enumerated(EnumType.STRING)
-    private EstadoPrestamo estado = EstadoPrestamo.ACTIVO;
-
-    public Prestamo() {
-    }
+    private EstadoPrestamo estadoFinal;
 
     public Long getId() {
         return id;
@@ -70,20 +73,36 @@ public class Prestamo {
         this.fechaPrestamo = fechaPrestamo;
     }
 
+    public LocalDate getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public void setFechaDevolucion(LocalDate fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public double getMulta() {
+        return multa;
+    }
+
+    public void setMulta(double multa) {
+        this.multa = multa;
+    }
+
+    public EstadoPrestamo getEstadoFinal() {
+        return estadoFinal;
+    }
+
+    public void setEstadoFinal(EstadoPrestamo estadoFinal) {
+        this.estadoFinal = estadoFinal;
+    }
+
     public LocalDate getFechaDevolucionPrevista() {
         return fechaDevolucionPrevista;
     }
 
     public void setFechaDevolucionPrevista(LocalDate fechaDevolucionPrevista) {
         this.fechaDevolucionPrevista = fechaDevolucionPrevista;
-    }
-
-    public EstadoPrestamo getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoPrestamo estado) {
-        this.estado = estado;
     }
 
     @Override
@@ -94,7 +113,11 @@ public class Prestamo {
         result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
         result = prime * result + ((libro == null) ? 0 : libro.hashCode());
         result = prime * result + ((fechaPrestamo == null) ? 0 : fechaPrestamo.hashCode());
-        result = prime * result + ((fechaDevolucionPrevista == null) ? 0 : fechaDevolucionPrevista.hashCode());
+        result = prime * result + ((fechaDevolucion == null) ? 0 : fechaDevolucion.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(multa);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((estadoFinal == null) ? 0 : estadoFinal.hashCode());
         return result;
     }
 
@@ -106,7 +129,7 @@ public class Prestamo {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Prestamo other = (Prestamo) obj;
+        HistorialPrestamo other = (HistorialPrestamo) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -127,10 +150,14 @@ public class Prestamo {
                 return false;
         } else if (!fechaPrestamo.equals(other.fechaPrestamo))
             return false;
-        if (fechaDevolucionPrevista == null) {
-            if (other.fechaDevolucionPrevista != null)
+        if (fechaDevolucion == null) {
+            if (other.fechaDevolucion != null)
                 return false;
-        } else if (!fechaDevolucionPrevista.equals(other.fechaDevolucionPrevista))
+        } else if (!fechaDevolucion.equals(other.fechaDevolucion))
+            return false;
+        if (Double.doubleToLongBits(multa) != Double.doubleToLongBits(other.multa))
+            return false;
+        if (estadoFinal != other.estadoFinal)
             return false;
         return true;
     }
