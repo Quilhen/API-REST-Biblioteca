@@ -6,22 +6,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public class UsuarioDto {
 
     private Long id;
 
     @Column(unique = true)
-    @NotNull
+    @NotBlank
     private String nombreUsuario;
 
-    @NotNull
+    @NotBlank
     @Email
     private String email;
-
-    @JsonIgnore
-    private List<LibroDto> libros;
 
     @JsonIgnore
     private List<PrestamoDto> prestamos;
@@ -53,13 +50,6 @@ public class UsuarioDto {
         this.email = email;
     }
 
-    public List<LibroDto> getLibros() {
-        return libros;
-    }
-
-    public void setLibros(List<LibroDto> libros) {
-        this.libros = libros;
-    }
 
     public List<PrestamoDto> getPrestamos() {
         return prestamos;
@@ -76,7 +66,6 @@ public class UsuarioDto {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((libros == null) ? 0 : libros.hashCode());
         result = prime * result + ((prestamos == null) ? 0 : prestamos.hashCode());
         return result;
     }
@@ -104,11 +93,6 @@ public class UsuarioDto {
             if (other.email != null)
                 return false;
         } else if (!email.equals(other.email))
-            return false;
-        if (libros == null) {
-            if (other.libros != null)
-                return false;
-        } else if (!libros.equals(other.libros))
             return false;
         if (prestamos == null) {
             if (other.prestamos != null)

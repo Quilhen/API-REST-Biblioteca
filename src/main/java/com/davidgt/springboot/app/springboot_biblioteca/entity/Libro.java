@@ -15,40 +15,45 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="libros")
+@Table(name = "libros")
 public class Libro {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String titulo;
 
-    @NotNull
+    @NotBlank
     private String autor;
 
     @Column(name = "anio_publicacion")
     private LocalDate añoPublicacion;
 
+    @NotBlank
     private String genero;
-
-    @NotNull
-    private boolean disponibilidad;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    @JsonIgnore
-    private Usuario usuario;
 
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Prestamo> prestamos;
 
+    private int copiasDisponibles;
+
+    public void incrementarCopiasDisponibles() {
+        this.copiasDisponibles++;
+    }
+
+    public void decrementarCopiasDisponibles() {
+        if (copiasDisponibles > 0) {
+            this.copiasDisponibles--;
+        }else{
+            throw new IllegalStateException("No hay copias disponibles para disminuir");
+        }
+    }
 
     public Libro() {
     }
@@ -93,28 +98,20 @@ public class Libro {
         this.genero = genero;
     }
 
-    public boolean isDisponibilidad() {
-        return disponibilidad;
-    }
-
-    public void setDisponibilidad(boolean disponibilidad) {
-        this.disponibilidad = disponibilidad;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public List<Prestamo> getPrestamos() {
         return prestamos;
     }
 
     public void setPrestamos(List<Prestamo> prestamos) {
         this.prestamos = prestamos;
+    }
+
+    public int getCopiasDisponibles() {
+        return copiasDisponibles;
+    }
+
+    public void setCopiasDisponibles(int copiasDisponibles) {
+        this.copiasDisponibles = copiasDisponibles;
     }
 
     @Override
@@ -126,9 +123,8 @@ public class Libro {
         result = prime * result + ((autor == null) ? 0 : autor.hashCode());
         result = prime * result + ((añoPublicacion == null) ? 0 : añoPublicacion.hashCode());
         result = prime * result + ((genero == null) ? 0 : genero.hashCode());
-        result = prime * result + (disponibilidad ? 1231 : 1237);
-        result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
         result = prime * result + ((prestamos == null) ? 0 : prestamos.hashCode());
+        result = prime * result + copiasDisponibles;
         return result;
     }
 
@@ -166,21 +162,16 @@ public class Libro {
                 return false;
         } else if (!genero.equals(other.genero))
             return false;
-        if (disponibilidad != other.disponibilidad)
-            return false;
-        if (usuario == null) {
-            if (other.usuario != null)
-                return false;
-        } else if (!usuario.equals(other.usuario))
-            return false;
         if (prestamos == null) {
             if (other.prestamos != null)
                 return false;
         } else if (!prestamos.equals(other.prestamos))
             return false;
+        if (copiasDisponibles != other.copiasDisponibles)
+            return false;
         return true;
     }
 
-    
+ 
 
 }

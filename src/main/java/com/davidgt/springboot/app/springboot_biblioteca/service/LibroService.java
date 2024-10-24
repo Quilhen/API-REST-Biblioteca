@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
@@ -95,6 +96,7 @@ public class LibroService {
      * @param libroDto El objeto LibroDto con los datos del libro a crear.
      * @return El libro recién creado en formato LibroDto.
      */
+    @Transactional
     public LibroDto crearLibro(LibroDto libroDto) {
         Libro libro = libroMapper.libroDtoToLibro(libroDto);
         libroRepository.save(libro);
@@ -110,6 +112,7 @@ public class LibroService {
      * @return El libro actualizado en formato LibroDto.
      * @throws ResourceNotFoundException Si el libro no es encontrado en la base de datos.
      */
+    @Transactional
     public LibroDto actualizarLibro(LibroDto libroDto, Long id) {
         Optional<Libro> libroOpt = libroRepository.findById(id);
 
@@ -122,8 +125,7 @@ public class LibroService {
         libro.setAutor(libroDto.getAutor());
         libro.setAñoPublicacion(libroDto.getAñoPublicacion());
         libro.setGenero(libroDto.getGenero());
-        libro.setDisponibilidad(libroDto.isDisponibilidad());
-        libro.setUsuario(libroDto.getUsuario());
+        libro.setCopiasDisponibles(libroDto.getCopiasDisponibles());
 
         libroRepository.save(libro);
         return libroMapper.libroToLibroDto(libro);
@@ -137,6 +139,7 @@ public class LibroService {
      * @return El libro eliminado en formato LibroDto.
      * @throws ResourceNotFoundException Si el libro no es encontrado en la base de datos.
      */
+    @Transactional
     public LibroDto eliminarLibro(Long id) {
         Optional<Libro> libroOpt = libroRepository.findById(id);
 

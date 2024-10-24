@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "usuarios")
@@ -33,19 +33,15 @@ public class Usuario {
     private Long id;
 
     @Column(unique = true)
-    @NotNull
+    @NotBlank
     private String nombreUsuario;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull
+    @NotBlank
     @Email
     private String email;
-
-    @OneToMany(mappedBy = "usuario")
-    @JsonIgnore
-    private List<Libro> libros;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -103,13 +99,6 @@ public class Usuario {
         this.email = email;
     }
 
-    public List<Libro> getLibros() {
-        return libros;
-    }
-
-    public void setLibros(List<Libro> libros) {
-        this.libros = libros;
-    }
 
     public List<Prestamo> getPrestamos() {
         return prestamos;
@@ -151,7 +140,6 @@ public class Usuario {
         result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((libros == null) ? 0 : libros.hashCode());
         result = prime * result + ((prestamos == null) ? 0 : prestamos.hashCode());
         result = prime * result + ((roles == null) ? 0 : roles.hashCode());
         result = prime * result + (activado ? 1231 : 1237);
@@ -187,11 +175,6 @@ public class Usuario {
             if (other.email != null)
                 return false;
         } else if (!email.equals(other.email))
-            return false;
-        if (libros == null) {
-            if (other.libros != null)
-                return false;
-        } else if (!libros.equals(other.libros))
             return false;
         if (prestamos == null) {
             if (other.prestamos != null)

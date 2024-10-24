@@ -1,13 +1,13 @@
 package com.davidgt.springboot.app.springboot_biblioteca.dto;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
 public class AuthRequestDto {
 
-    @NotEmpty
+    @NotBlank
     private String nombreUsuario;
     
-    @NotEmpty
+    @NotBlank
     private String password;
 
     public String getNombreUsuario() {

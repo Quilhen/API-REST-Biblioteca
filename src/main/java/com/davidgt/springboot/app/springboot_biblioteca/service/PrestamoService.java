@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.davidgt.springboot.app.springboot_biblioteca.dto.PrestamoDto;
 import com.davidgt.springboot.app.springboot_biblioteca.entity.*;
@@ -16,10 +17,12 @@ import com.davidgt.springboot.app.springboot_biblioteca.repository.PrestamoRepos
 import com.davidgt.springboot.app.springboot_biblioteca.repository.UsuarioRepository;
 
 /**
- * Servicio que gestiona la lógica de negocio relacionada con los préstamos de libros.
+ * Servicio que gestiona la lógica de negocio relacionada con los préstamos de
+ * libros.
  * Proporciona métodos para crear, obtener, devolver y listar préstamos.
  * 
- * Interactúa con los repositorios PrestamoRepository, UsuarioRepository y LibroRepository
+ * Interactúa con los repositorios PrestamoRepository, UsuarioRepository y
+ * LibroRepository
  * para manejar las operaciones de préstamo en la base de datos.
  * Utiliza PrestamoMapper para convertir entre entidades y DTOs.
  * 
@@ -76,11 +79,13 @@ public class PrestamoService {
      * 
      * @param prestamoDto El objeto PrestamoDto con los datos del préstamo a crear.
      * @return El préstamo recién creado en formato PrestamoDto.
-     * @throws ResourceNotFoundException Si el usuario o el libro no existen, o si el usuario
-     * ya tiene demasiados préstamos o el libro no está disponible.
+     * @throws ResourceNotFoundException Si el usuario o el libro no existen, o si
+     *                                   el usuario
+     *                                   ya tiene demasiados préstamos o el libro no
+     *                                   está disponible.
      */
+    @Transactional
     public PrestamoDto crearPrestamo(PrestamoDto prestamoDto) {
-        Prestamo prestamo = new Prestamo();
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(prestamoDto.getUsuario().getId());
         if (!usuarioOpt.isPresent()) {
@@ -96,23 +101,29 @@ public class PrestamoService {
             throw new ResourceNotFoundException("El libro no existe!");
         }
 
-        if (!libroOpt.get().isDisponibilidad()) {
-            throw new ResourceNotFoundException("El libro ya esta prestado!");
+        if (libroOpt.get().getCopiasDisponibles() < 1) {
+            throw new ResourceNotFoundException("No hay copias disponibles!");
         }
 
-        Usuario usuario = usuarioOpt.get();
-        Libro libro = libroOpt.get();
+        try {
+            Prestamo prestamo = new Prestamo();
+            Usuario usuario = usuarioOpt.get();
+            Libro libro = libroOpt.get();
 
-        libro.setDisponibilidad(false);
-        libro.setUsuario(usuario);
-        prestamo.setUsuario(usuario);
-        prestamo.setLibro(libro);
-        prestamo.setFechaPrestamo(LocalDate.now());
-        //prestamo.setFechaDevolucionPrevista(LocalDate.now().plusDays(7));
-        prestamo.setFechaDevolucionPrevista(LocalDate.now().minusDays(1));
-        prestamoRepository.save(prestamo);
+            libro.decrementarCopiasDisponibles();
+            prestamo.setUsuario(usuario);
+            prestamo.setLibro(libro);
+            prestamo.setFechaPrestamo(LocalDate.now());
+            prestamo.setFechaDevolucionPrevista(LocalDate.now().plusDays(7));
+            // prestamo.setFechaDevolucionPrevista(LocalDate.now().minusDays(1));
+            prestamoRepository.save(prestamo);
+            // libroRepository.save(libro);
 
-        return prestamoMapper.prestamoToPrestamoDto(prestamo);
+            return prestamoMapper.prestamoToPrestamoDto(prestamo);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear el préstamo", e);
+        }
+
     }
 
     /**
@@ -122,6 +133,7 @@ public class PrestamoService {
      * @return El préstamo actualizado en formato PrestamoDto.
      * @throws ResourceNotFoundException Si el préstamo no es encontrado.
      */
+    @Transactional
     public PrestamoDto devolverPrestamo(Long id) {
         Optional<Prestamo> prestamoOpt = prestamoRepository.findById(id);
 
@@ -130,25 +142,27 @@ public class PrestamoService {
         }
 
         Prestamo prestamo = prestamoOpt.get();
-        prestamo.getLibro().setDisponibilidad(true);
-        prestamo.getLibro().setUsuario(null);
+        Libro libro = libroRepository.findById(prestamo.getLibro().getId()).orElseThrow(() -> new ResourceNotFoundException("No existe el libro"));
 
         historialPrestamoService.crearHistorialPrestamo(prestamo);
 
         prestamoRepository.delete(prestamo);
+        libro.incrementarCopiasDisponibles();
+        libroRepository.save(libro);
+        
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
 
     }
 
-
-     /**
+    /**
      * Marca un préstamo como perdido.
      * 
      * @param id El ID del préstamo que se desea marcar como perdido.
      * @return El préstamo actualizado en formato PrestamoDto.
      * @throws ResourceNotFoundException Si el préstamo no es encontrado.
      */
-    public PrestamoDto cambiarEstado(Long id){
+    @Transactional
+    public PrestamoDto cambiarEstado(Long id) {
         Optional<Prestamo> prestamoOpt = prestamoRepository.findById(id);
 
         if (!prestamoOpt.isPresent()) {

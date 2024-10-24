@@ -3,32 +3,28 @@ package com.davidgt.springboot.app.springboot_biblioteca.dto;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.davidgt.springboot.app.springboot_biblioteca.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public class LibroDto {
 
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String titulo;
 
-    @NotNull
+    @NotBlank
     private String autor;
 
     private LocalDate añoPublicacion;
     private String genero;
 
-    @NotNull
-    private boolean disponibilidad;
-
-    @JsonIgnore
-    private Usuario usuario;
-
     @JsonIgnore
     private List<PrestamoDto> prestamos;
+
+    
+    private int copiasDisponibles;
 
     public LibroDto() {
     }
@@ -73,28 +69,20 @@ public class LibroDto {
         this.genero = genero;
     }
 
-    public boolean isDisponibilidad() {
-        return disponibilidad;
-    }
-
-    public void setDisponibilidad(boolean disponibilidad) {
-        this.disponibilidad = disponibilidad;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public List<PrestamoDto> getPrestamos() {
         return prestamos;
     }
 
     public void setPrestamos(List<PrestamoDto> prestamos) {
         this.prestamos = prestamos;
+    }
+
+    public int getCopiasDisponibles() {
+        return copiasDisponibles;
+    }
+
+    public void setCopiasDisponibles(int copiasDisponibles) {
+        this.copiasDisponibles = copiasDisponibles;
     }
 
     @Override
@@ -106,9 +94,8 @@ public class LibroDto {
         result = prime * result + ((autor == null) ? 0 : autor.hashCode());
         result = prime * result + ((añoPublicacion == null) ? 0 : añoPublicacion.hashCode());
         result = prime * result + ((genero == null) ? 0 : genero.hashCode());
-        result = prime * result + (disponibilidad ? 1231 : 1237);
-        result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
         result = prime * result + ((prestamos == null) ? 0 : prestamos.hashCode());
+        result = prime * result + copiasDisponibles;
         return result;
     }
 
@@ -146,19 +133,18 @@ public class LibroDto {
                 return false;
         } else if (!genero.equals(other.genero))
             return false;
-        if (disponibilidad != other.disponibilidad)
-            return false;
-        if (usuario == null) {
-            if (other.usuario != null)
-                return false;
-        } else if (!usuario.equals(other.usuario))
-            return false;
         if (prestamos == null) {
             if (other.prestamos != null)
                 return false;
         } else if (!prestamos.equals(other.prestamos))
             return false;
+        if (copiasDisponibles != other.copiasDisponibles)
+            return false;
         return true;
     }
+
+ 
+
+    
 
 }

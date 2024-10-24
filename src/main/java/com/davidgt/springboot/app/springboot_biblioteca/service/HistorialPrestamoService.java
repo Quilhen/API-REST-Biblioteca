@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.davidgt.springboot.app.springboot_biblioteca.entity.EstadoPrestamo;
 import com.davidgt.springboot.app.springboot_biblioteca.entity.HistorialPrestamo;
@@ -24,6 +25,7 @@ public class HistorialPrestamoService {
         return historialPrestamosRepository.findAll();
     }
     
+    @Transactional
     public void crearHistorialPrestamo(Prestamo prestamo){
         HistorialPrestamo historialPrestamo = new HistorialPrestamo();
         historialPrestamo.setId(prestamo.getId());
