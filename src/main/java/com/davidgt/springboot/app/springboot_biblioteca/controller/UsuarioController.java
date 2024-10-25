@@ -48,7 +48,8 @@ public class UsuarioController {
                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida con éxito"),
-        @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
+        @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -69,7 +70,8 @@ public class UsuarioController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Préstamos activos obtenidos con éxito"),
         @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/prestamos")
@@ -89,7 +91,8 @@ public class UsuarioController {
      */
     @Operation(summary = "Crear un nuevo usuario con rol de admin", description = "Crea un nuevo usuario administrador en el sistema.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Usuario admin creado con éxito")
+        @ApiResponse(responseCode = "201", description = "Usuario admin creado con éxito"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
@@ -106,7 +109,8 @@ public class UsuarioController {
      */
     @Operation(summary = "Crear un nuevo usuario", description = "Crea un nuevo usuario no administrador en el sistema.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Usuario registrado con éxito")
+        @ApiResponse(responseCode = "201", description = "Usuario registrado con éxito"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping("/registrarse")
     public ResponseEntity<?> registro(@RequestBody Usuario usuario) {

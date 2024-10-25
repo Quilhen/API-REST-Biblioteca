@@ -59,6 +59,7 @@ public class LibroController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de libros obtenida con éxito"),
             @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
@@ -85,6 +86,7 @@ public class LibroController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Libros filtrados obtenidos con éxito"),
         @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/librosFiltros")
@@ -116,6 +118,7 @@ public class LibroController {
         @ApiResponse(responseCode = "200", description = "Libro obtenido con éxito"),
         @ApiResponse(responseCode = "404", description = "Libro no encontrado"),
         @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
@@ -136,6 +139,7 @@ public class LibroController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Libro creado con éxito"),
         @ApiResponse(responseCode = "403", description = "No tienes permisos para crear un libro"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -157,7 +161,8 @@ public class LibroController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Libro actualizado con éxito"),
         @ApiResponse(responseCode = "403", description = "No tienes permisos para actualizar un libro"),
-        @ApiResponse(responseCode = "404", description = "Libro no encontrado")
+        @ApiResponse(responseCode = "404", description = "Libro no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
@@ -179,7 +184,8 @@ public class LibroController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Libro eliminado con éxito"),
         @ApiResponse(responseCode = "403", description = "No tienes permisos para eliminar un libro"),
-        @ApiResponse(responseCode = "404", description = "Libro no encontrado")
+        @ApiResponse(responseCode = "404", description = "Libro no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

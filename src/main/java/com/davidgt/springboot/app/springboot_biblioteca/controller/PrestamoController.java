@@ -48,7 +48,8 @@ public class PrestamoController {
     @Operation(summary = "Obtener todos los préstamos", description = "Devuelve una lista de todos los préstamos registrados.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de préstamos obtenida con éxito"),
-            @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -67,7 +68,8 @@ public class PrestamoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Préstamo obtenido con éxito"),
             @ApiResponse(responseCode = "404", description = "Préstamo no encontrado"),
-            @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso")
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
@@ -86,7 +88,8 @@ public class PrestamoController {
     @Operation(summary = "Crear un nuevo préstamo", description = "Crea un nuevo préstamo en el sistema.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Préstamo creado con éxito"),
-            @ApiResponse(responseCode = "403", description = "No tienes permisos para crear un préstamo")
+            @ApiResponse(responseCode = "403", description = "No tienes permisos para crear un préstamo"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -106,7 +109,8 @@ public class PrestamoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Préstamo devuelto con éxito"),
             @ApiResponse(responseCode = "403", description = "No tienes permisos para devolver un préstamo"),
-            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado")
+            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/devolver")
@@ -127,7 +131,8 @@ public class PrestamoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estado del préstamo cambiado con éxito"),
             @ApiResponse(responseCode = "403", description = "No tienes permisos para cambiar el estado del préstamo"),
-            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado")
+            @ApiResponse(responseCode = "404", description = "Préstamo no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/perdido")

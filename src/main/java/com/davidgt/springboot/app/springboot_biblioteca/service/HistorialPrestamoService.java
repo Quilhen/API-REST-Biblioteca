@@ -20,11 +20,25 @@ public class HistorialPrestamoService {
     @Autowired
     private HistorialPrestamosRepository historialPrestamosRepository;
 
-
+    /**
+     * Obtiene una lista de todos los prestamos guardados en el historial
+     * 
+     * @return Una lista con los prestamos almacenados en el historial
+     */
     public List<HistorialPrestamo> getAllHistorialPrestamos(){
         return historialPrestamosRepository.findAll();
     }
     
+    
+    /**
+     * Crea un registro de historial a partir de un préstamo dado. 
+     * Este método genera un objeto de historial copiando los detalles 
+     * del préstamo, incluyendo el usuario, libro, fechas y estado.
+     * 
+     *  Si el préstamo está vencido, asigna una multa al historial.
+     * 
+     * @param prestamo El prestamo que se va a guardar en el historial
+     */
     @Transactional
     public void crearHistorialPrestamo(Prestamo prestamo){
         HistorialPrestamo historialPrestamo = new HistorialPrestamo();
