@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.davidgt.springboot.app.springboot_biblioteca.dto.PrestamoDto;
 import com.davidgt.springboot.app.springboot_biblioteca.entity.*;
+import com.davidgt.springboot.app.springboot_biblioteca.exception.PrestamoDuplicadoException;
 import com.davidgt.springboot.app.springboot_biblioteca.exception.ResourceNotFoundException;
 import com.davidgt.springboot.app.springboot_biblioteca.mapper.PrestamoMapper;
 import com.davidgt.springboot.app.springboot_biblioteca.repository.LibroRepository;
@@ -45,6 +46,12 @@ public class PrestamoService {
 
     @Autowired
     private HistorialPrestamoService historialPrestamoService;
+
+    @Autowired
+    private ReservaService reservaService;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Obtiene una lista de todos los préstamos en el sistema.
@@ -85,7 +92,7 @@ public class PrestamoService {
      *                                   está disponible.
      */
     @Transactional
-    public PrestamoDto crearPrestamo(PrestamoDto prestamoDto) {
+    public PrestamoDto gestionarPrestamo(PrestamoDto prestamoDto) {
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(prestamoDto.getUsuario().getId());
         if (!usuarioOpt.isPresent()) {
@@ -105,24 +112,31 @@ public class PrestamoService {
             throw new ResourceNotFoundException("No hay copias disponibles!");
         }
 
-        try {
-            Prestamo prestamo = new Prestamo();
-            Usuario usuario = usuarioOpt.get();
-            Libro libro = libroOpt.get();
+        prestamoRepetido(prestamoDto);
+        Usuario usuario = usuarioOpt.get();
+        Libro libro = libroOpt.get();
+        Prestamo prestamo = crearPrestamo(usuario, libro);
 
-            libro.decrementarCopiasDisponibles();
+        return prestamoMapper.prestamoToPrestamoDto(prestamo);
+
+    }
+
+    @Transactional
+    public Prestamo crearPrestamo(Usuario usuario, Libro libro) {
+        Prestamo prestamo = new Prestamo();
+        try {
             prestamo.setUsuario(usuario);
             prestamo.setLibro(libro);
             prestamo.setFechaPrestamo(LocalDate.now());
             prestamo.setFechaDevolucionPrevista(LocalDate.now().plusDays(7));
-            // prestamo.setFechaDevolucionPrevista(LocalDate.now().minusDays(1));
             prestamoRepository.save(prestamo);
-            // libroRepository.save(libro);
-
-            return prestamoMapper.prestamoToPrestamoDto(prestamo);
+            libro.decrementarCopiasDisponibles();
+            libroRepository.save(libro);
         } catch (Exception e) {
             throw new RuntimeException("Error al crear el préstamo", e);
         }
+
+        return prestamo;
 
     }
 
@@ -135,22 +149,59 @@ public class PrestamoService {
      */
     @Transactional
     public PrestamoDto devolverPrestamo(Long id) {
-        Optional<Prestamo> prestamoOpt = prestamoRepository.findById(id);
+        Prestamo prestamo = obtenerPrestamoPorId(id);
+        Libro libro = obtenerLibroPorId(prestamo.getLibro().getId());
 
-        if (!prestamoOpt.isPresent()) {
-            throw new ResourceNotFoundException("No existe el prestamo con el id: " + id);
-        }
+        procesarDevolucion(prestamo, libro);
+        gestionarReservasPendientes(libro);
 
-        Prestamo prestamo = prestamoOpt.get();
-        Libro libro = libroRepository.findById(prestamo.getLibro().getId()).orElseThrow(() -> new ResourceNotFoundException("No existe el libro"));
+        return prestamoMapper.prestamoToPrestamoDto(prestamo);
 
+    }
+
+    private Prestamo obtenerPrestamoPorId(Long prestamoId) {
+        return prestamoRepository.findById(prestamoId)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el préstamo con el id: " + prestamoId));
+    }
+
+    private Libro obtenerLibroPorId(Long libroId) {
+        return libroRepository.findById(libroId)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el libro con el id: " + libroId));
+    }
+
+    private void procesarDevolucion(Prestamo prestamo, Libro libro) {
         historialPrestamoService.crearHistorialPrestamo(prestamo);
-
         prestamoRepository.delete(prestamo);
         libro.incrementarCopiasDisponibles();
         libroRepository.save(libro);
-        
-        return prestamoMapper.prestamoToPrestamoDto(prestamo);
+    }
+
+    private void gestionarReservasPendientes(Libro libroDevuelto) {
+        List<Reserva> reservasPendientes = reservaService.getReservasPendientesByLibro(libroDevuelto.getId());
+        if (!reservasPendientes.isEmpty()) {
+
+            try {
+                Reserva primeraReserva = reservasPendientes.get(0);
+                reservaService.completarReserva(primeraReserva);
+
+                Libro libro = primeraReserva.getLibro();
+                Usuario usuario = primeraReserva.getUsuario();
+
+                Prestamo prestamo = crearPrestamo(usuario, libro);
+                prestamoRepository.save(prestamo);
+
+                String emailUsuario = primeraReserva.getUsuario().getEmail();
+                String tituloLibro = libro.getTitulo();
+                String asunto = "Tu reserva esta lista.";
+                String text = String.format("Hola %s, el libro '%s' que reservastes ya esta disponible.",
+                        usuario.getNombreUsuario(), tituloLibro);
+
+                emailService.enviarMensaje(emailUsuario, asunto, text);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al crear el préstamo mediante la reserva!", e);
+            }
+
+        }
 
     }
 
@@ -175,6 +226,16 @@ public class PrestamoService {
         prestamoRepository.delete(prestamo);
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
 
+    }
+
+    public void prestamoRepetido(PrestamoDto prestamoDto) {
+        Libro libro = prestamoDto.getLibro();
+        Usuario usuario = prestamoDto.getUsuario();
+        Boolean existe = prestamoRepository.existsByUsuarioAndLibro(usuario, libro);
+
+        if (existe) {
+            throw new PrestamoDuplicadoException("No puedes hacer un prestamo del mismo libro!");
+        }
     }
 
 }

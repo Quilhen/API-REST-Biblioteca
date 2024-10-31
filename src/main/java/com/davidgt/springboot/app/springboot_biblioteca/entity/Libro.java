@@ -11,8 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -43,6 +41,9 @@ public class Libro {
 
     private int copiasDisponibles;
 
+    @OneToMany
+    private List<Reserva> reservas;
+
     public void incrementarCopiasDisponibles() {
         this.copiasDisponibles++;
     }
@@ -50,9 +51,13 @@ public class Libro {
     public void decrementarCopiasDisponibles() {
         if (copiasDisponibles > 0) {
             this.copiasDisponibles--;
-        }else{
+        } else {
             throw new IllegalStateException("No hay copias disponibles para disminuir");
         }
+    }
+
+    public boolean reservasPendientres() {
+        return reservas.stream().anyMatch(r -> r.getEstadoReserva() == EstadoReserva.PENDIENTE);
     }
 
     public Libro() {
@@ -171,7 +176,5 @@ public class Libro {
             return false;
         return true;
     }
-
- 
 
 }

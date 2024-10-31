@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 
@@ -37,7 +38,7 @@ public class ControllerExceptionHandler {
      * @return Un objeto ResponseEntity que contiene el error y un código HTTP 404.
      */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Error> resourcResponseEntity(ResourceNotFoundException ex, WebRequest request){
+    public ResponseEntity<Error> resourceResponseEntity(ResourceNotFoundException ex, WebRequest request){
         Error error = new Error();
         error.setCodigo(HttpStatus.NOT_FOUND.value());
         error.setMensaje(ex.getMessage());
@@ -68,5 +69,17 @@ public class ControllerExceptionHandler {
 
         return new ResponseEntity<Error>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
+
+    @ExceptionHandler(PrestamoDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<Error> prestamoDuplicadoException(Exception ex, WebRequest request){
+        Error error = new Error();
+        error.setCodigo(HttpStatus.CONFLICT.value());
+        error.setMensaje(ex.getMessage());
+        error.setDescripcion(request.getDescription(false));
+        error.setTimestamp(new Date());
+
+        return new ResponseEntity<Error>(error, HttpStatus.CONFLICT);
     }
 }

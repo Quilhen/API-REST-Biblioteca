@@ -94,7 +94,7 @@ public class PrestamoController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> crearPrestamo(@Valid @RequestBody PrestamoDto prestamoDto) {
-        PrestamoDto prestamo = prestamoService.crearPrestamo(prestamoDto);
+        PrestamoDto prestamo = prestamoService.gestionarPrestamo(prestamoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(prestamo);
     }
 
