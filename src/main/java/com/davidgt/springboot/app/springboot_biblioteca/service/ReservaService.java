@@ -27,6 +27,11 @@ public class ReservaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
+    /*
+     * Crea una nueva reserva para un libro en específico por parte de un usuario.
+     *
+     */
     public Reserva crearReserva(Long usuarioId, Long libroId) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
         Optional<Libro> libroOpt = libroRepository.findById(libroId);
@@ -54,6 +59,12 @@ public class ReservaService {
 
     }
 
+
+     /**
+     * Obtiene una lista de reservas pendientes para un libro en específico.
+     *
+     * @throws ResourceNotFoundException Si el libro no existe.
+     */
     public List<Reserva> getReservasPendientesByLibro(Long libroId) {
         Libro libro = libroRepository.findById(libroId)
                 .orElseThrow(() -> new ResourceNotFoundException("Libro no encontrado"));
@@ -61,6 +72,10 @@ public class ReservaService {
         return reservaRepository.findByLibroAndEstadoReserva(libro, EstadoReserva.PENDIENTE);
     }
 
+    /**
+     * Completa una reserva específica, cambiando su estado a COMPLETADA.
+     *
+     */
     public void completarReserva(Reserva reserva) {
         reserva.setEstadoReserva(EstadoReserva.COMPLETADA);
         reservaRepository.save(reserva);
