@@ -140,7 +140,7 @@ public class LibroService {
      * @throws ResourceNotFoundException Si el libro no es encontrado en la base de datos.
      */
     @Transactional
-    public LibroDto eliminarLibro(Long id) {
+    public void eliminarLibro(Long id) {
         Optional<Libro> libroOpt = libroRepository.findById(id);
 
         if (!libroOpt.isPresent()) {
@@ -149,7 +149,6 @@ public class LibroService {
 
         Libro libro = libroOpt.get();
         libroRepository.delete(libro);
-        return libroMapper.libroToLibroDto(libro);
     }
 
 }

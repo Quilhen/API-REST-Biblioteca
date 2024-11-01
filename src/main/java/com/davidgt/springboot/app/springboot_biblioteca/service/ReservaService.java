@@ -29,7 +29,7 @@ public class ReservaService {
 
 
     /*
-     * Crea una nueva reserva para un libro en específico por parte de un usuario.
+     * Crea una nueva reserva para un libro por parte de un usuario.
      *
      */
     public Reserva crearReserva(Long usuarioId, Long libroId) {
@@ -61,7 +61,7 @@ public class ReservaService {
 
 
      /**
-     * Obtiene una lista de reservas pendientes para un libro en específico.
+     * Obtiene una lista de reservas pendientes de un libro.
      *
      * @throws ResourceNotFoundException Si el libro no existe.
      */
@@ -73,7 +73,7 @@ public class ReservaService {
     }
 
     /**
-     * Completa una reserva específica, cambiando su estado a COMPLETADA.
+     * Completa una reserva, cambiando su estado a COMPLETADA.
      *
      */
     public void completarReserva(Reserva reserva) {

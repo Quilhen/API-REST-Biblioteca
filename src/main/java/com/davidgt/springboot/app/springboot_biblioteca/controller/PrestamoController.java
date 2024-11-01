@@ -103,7 +103,7 @@ public class PrestamoController {
      * Requiere autenticación con rol ADMIN.
      * 
      * @param id El ID del préstamo que se desea marcar como devuelto.
-     * @return El préstamo actualizado en formato PrestamoDto.
+     * @return Respuesta de éxito si el prestamo de ha devuelto.
      */
     @Operation(summary = "Marcar préstamo como devuelto", description = "Marca un préstamo existente como devuelto.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
@@ -115,8 +115,8 @@ public class PrestamoController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/devolver")
     public ResponseEntity<?> devolverPrestamo(@PathVariable Long id) {
-        PrestamoDto prestamo = prestamoService.devolverPrestamo(id);
-        return ResponseEntity.status(HttpStatus.OK).body(prestamo);
+         prestamoService.devolverPrestamo(id);
+        return ResponseEntity.noContent().build();
     }
 
 

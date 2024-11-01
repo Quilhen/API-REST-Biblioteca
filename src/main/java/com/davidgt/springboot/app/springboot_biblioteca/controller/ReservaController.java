@@ -31,7 +31,7 @@ public class ReservaController {
     private ReservaService reservaService;
 
     /**
-     * Permite a un usuario reservar un libro.
+     * Endpoint para crear la reserva de un libro.
      * 
      * @param libroId   El ID del libro que se desea reservar.
      * @param usuarioId El ID del usuario que hace la reserva.
@@ -41,7 +41,8 @@ public class ReservaController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Reserva creada con éxito"),
             @ApiResponse(responseCode = "404", description = "Libro o usuario no encontrado"),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/libros/{libroId}/reservar")
@@ -51,7 +52,7 @@ public class ReservaController {
     }
 
     /**
-     * Obtiene las reservas pendientes para un libro específico.
+     * Endpoint para obtener las reservas pendientes de un libro.
      *
      * @param libroId El ID del libro para el cual se buscan las reservas
      *                pendientes.
@@ -61,7 +62,8 @@ public class ReservaController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Reservas pendientes obtenidas con éxito"),
             @ApiResponse(responseCode = "404", description = "Libro no encontrado"),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/libros/{libroId}/pendientes")

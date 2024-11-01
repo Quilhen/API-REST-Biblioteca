@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -189,9 +188,9 @@ public class LibroController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminearLibro(@PathVariable Long id) {
-        LibroDto libro = libroService.eliminarLibro(id);
-        return ResponseEntity.status(HttpStatusCode.valueOf(204)).body(libro);
+    public ResponseEntity<?> eliminarLibro(@PathVariable Long id) {
+        libroService.eliminarLibro(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

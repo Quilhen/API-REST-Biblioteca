@@ -57,7 +57,8 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDto save(Usuario usuario) {
-        // Antes de crear el usuario añadimos el rol ROLE_USER y comprobamos si es admin.
+        // Antes de crear el usuario añadimos el rol ROLE_USER y comprobamos si es
+        // admin.
         Optional<Rol> optionalRoleUser = rolRepository.findByNombre("ROLE_USER");
         List<Rol> roles = new ArrayList<>();
 
@@ -79,14 +80,13 @@ public class UsuarioService {
         return usuarioRepository.existsByNombreUsuario(username);
     }
 
-
     @Transactional
-    public UsuarioDto actualizarUsuario(Long id, UsuarioDto usuarioDto){
+    public UsuarioDto actualizarUsuario(Long id, UsuarioDto usuarioDto) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
 
-        if (!usuarioOpt.isPresent()){
+        if (!usuarioOpt.isPresent()) {
             throw new ResourceNotFoundException("Usuario no encontrado con el ID: " + id);
- 
+
         }
 
         Usuario usuario = usuarioOpt.get();
@@ -96,17 +96,16 @@ public class UsuarioService {
         return usuarioMapper.usuarioToUsuarioDto(usuario);
     }
 
-
     @Transactional
-    public void eliminarUsuario(Long id){
+    public UsuarioDto eliminarUsuario(Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
 
-        if(!usuario.isPresent()){
+        if (!usuario.isPresent()) {
             throw new ResourceNotFoundException("Usuario no encontrado con el ID: " + id);
         }
 
         usuarioRepository.delete(usuario.get());
+        return usuarioMapper.usuarioToUsuarioDto(usuario.get());
     }
-
 
 }

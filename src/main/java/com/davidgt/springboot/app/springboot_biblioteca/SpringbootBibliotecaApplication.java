@@ -32,6 +32,7 @@ public class SpringbootBibliotecaApplication {
 					.addTagsItem(new Tag().name("Usuarios").description("Operaciones relacionadas con los usuarios."))
 					.addTagsItem(new Tag().name("Libros").description("Operaciones relacionadas con los libros."))
 					.addTagsItem(new Tag().name("Prestamos").description("Operaciones relacionadas con los prestamos."))
+					.addTagsItem(new Tag().name("Reservas").description("Operaciones relacionadas con las reservas."))
 					.components(new Components()
 						.addSecuritySchemes("bearerAuth", new SecurityScheme()
 							.type(SecurityScheme.Type.HTTP)

@@ -156,14 +156,12 @@ public class PrestamoService {
      * @throws ResourceNotFoundException Si el préstamo no es encontrado.
      */
     @Transactional
-    public PrestamoDto devolverPrestamo(Long id) {
+    public void devolverPrestamo(Long id) {
         Prestamo prestamo = obtenerPrestamoPorId(id);
         Libro libro = obtenerLibroPorId(prestamo.getLibro().getId());
 
         procesarDevolucion(prestamo, libro);
         gestionarReservasPendientes(libro);
-
-        return prestamoMapper.prestamoToPrestamoDto(prestamo);
 
     }
 

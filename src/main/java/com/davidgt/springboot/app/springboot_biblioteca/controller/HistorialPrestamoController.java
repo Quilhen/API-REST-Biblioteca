@@ -38,7 +38,6 @@ public class HistorialPrestamoController {
             @ApiResponse(responseCode = "200", description = "Historial obtenido con éxito"),
             @ApiResponse(responseCode = "403", description = "No tienes permisos para acceder a este recurso"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-            
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
