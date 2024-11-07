@@ -18,10 +18,13 @@ import com.davidgt.springboot.app.springboot_biblioteca.repository.PrestamoRepos
 import com.davidgt.springboot.app.springboot_biblioteca.repository.UsuarioRepository;
 
 /**
- * Servicio que gestiona la lógica de negocio relacionada con los préstamos de libros.
- * Proporciona métodos para crear, obtener, devolver y gestionar el estado de los préstamos.
+ * Servicio que gestiona la lógica de negocio relacionada con los préstamos de
+ * libros.
+ * Proporciona métodos para crear, obtener, devolver y gestionar el estado de
+ * los préstamos.
  * 
- * Este servicio interactúa con los repositorios de Prestamo, Usuario y Libro para 
+ * Este servicio interactúa con los repositorios de Prestamo, Usuario y Libro
+ * para
  * manejar las operaciones de préstamo en la base de datos.
  * También utiliza servicios de Historial, Reserva y Notificación de Correo.
  * 
@@ -78,49 +81,44 @@ public class PrestamoService {
 
     }
 
-     /**
+    /**
      * Crea un nuevo préstamo para un usuario y un libro en específicos, si cumplen
      * con las reglas de negocio.
      * El usuario no puede tener más de 3 préstamos activos.
      * 
      * @param prestamoDto El objeto PrestamoDto con los datos del préstamo a crear.
      * @return El préstamo recién creado en formato PrestamoDto.
-     * @throws ResourceNotFoundException Si el usuario o el libro no existen o si 
-     *                                   se exceden los límites de préstamo.
-     * @throws PrestamoDuplicadoException Si el usuario ya tiene un préstamo para el mismo libro.
+     * @throws ResourceNotFoundException  Si el usuario o el libro no existen o si
+     *                                    se exceden los límites de préstamo.
+     * @throws PrestamoDuplicadoException Si el usuario ya tiene un préstamo para el
+     *                                    mismo libro.
      */
     @Transactional
     public PrestamoDto gestionarPrestamo(PrestamoDto prestamoDto) {
+        Usuario usuario = usuarioRepository.findById(prestamoDto.getUsuario().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario no existe!"));
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(prestamoDto.getUsuario().getId());
-        if (!usuarioOpt.isPresent()) {
-            throw new ResourceNotFoundException("El usuario no existe!");
-        }
-
-        if (usuarioOpt.get().getPrestamos().size() >= 3) {
+        if (usuario.getPrestamos().size() >= 3) {
             throw new ResourceNotFoundException("No puedes tener mas de 3 libros prestados!");
         }
 
-        Optional<Libro> libroOpt = libroRepository.findById(prestamoDto.getLibro().getId());
-        if (!libroOpt.isPresent()) {
-            throw new ResourceNotFoundException("El libro no existe!");
-        }
+        Libro libro = libroRepository.findById(prestamoDto.getLibro().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("El libro no existe!"));
 
-        if (libroOpt.get().getCopiasDisponibles() < 1) {
+        if (libro.getCopiasDisponibles() < 1) {
             throw new ResourceNotFoundException("No hay copias disponibles!");
         }
 
-        prestamoRepetido(prestamoDto);
-        Usuario usuario = usuarioOpt.get();
-        Libro libro = libroOpt.get();
-        Prestamo prestamo = crearPrestamo(usuario, libro);
+        if (prestamoRepository.existsByUsuarioAndLibro(usuario, libro)) {
+            throw new PrestamoDuplicadoException("No puedes hacer un prestamo del mismo libro!");
+        }
 
+        Prestamo prestamo = crearPrestamo(usuario, libro);
         return prestamoMapper.prestamoToPrestamoDto(prestamo);
 
     }
 
-
-     /**
+    /**
      * Crea un préstamo nuevo para el usuario y el libro especificados.
      *
      * @param usuario El usuario que solicita el préstamo.
@@ -147,8 +145,9 @@ public class PrestamoService {
 
     }
 
-   /**
-     * Marca un préstamo como devuelto y actualiza el inventario de copias disponibles.
+    /**
+     * Marca un préstamo como devuelto y actualiza el inventario de copias
+     * disponibles.
      * También gestiona reservas pendientes si existen.
      * 
      * @param id El ID del préstamo que se desea marcar como devuelto.
@@ -165,8 +164,7 @@ public class PrestamoService {
 
     }
 
-
-      /**
+    /**
      * Recupera un préstamo por su ID o lanza una excepción si no existe.
      * 
      */
@@ -175,8 +173,7 @@ public class PrestamoService {
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el préstamo con el id: " + prestamoId));
     }
 
-
-     /**
+    /**
      * Recupera un libro por su ID o lanza una excepción si no existe.
      * 
      */
@@ -185,8 +182,7 @@ public class PrestamoService {
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el libro con el id: " + libroId));
     }
 
-
-     /**
+    /**
      * Procesa la devolución de un préstamo, guardando el historial y
      * actualizando el inventario de libros.
      * 
@@ -200,9 +196,9 @@ public class PrestamoService {
         libroRepository.save(libro);
     }
 
-
     /**
-     * Gestiona las reservas pendientes de un libro devuelto. Completa la primera reserva en cola,
+     * Gestiona las reservas pendientes de un libro devuelto. Completa la primera
+     * reserva en cola,
      * crea un préstamo y envía una notificación al usuario correspondiente.
      * 
      * @param libroDevuelto El libro devuelto que puede tener reservas pendientes.
@@ -237,8 +233,9 @@ public class PrestamoService {
 
     }
 
-  /**
-     * Marca un préstamo como perdido y lo guarda en el historial antes de eliminarlo.
+    /**
+     * Marca un préstamo como perdido y lo guarda en el historial antes de
+     * eliminarlo.
      * 
      * @param id El ID del préstamo que se desea marcar como perdido.
      * @return El préstamo actualizado en formato PrestamoDto.
@@ -260,12 +257,12 @@ public class PrestamoService {
 
     }
 
-
-     /**
+    /**
      * Verifica si el usuario ya tiene un préstamo para el libro solicitado.
      * 
      * @param prestamoDto Objeto PrestamoDto que contiene información del préstamo.
-     * @throws PrestamoDuplicadoException Si el usuario ya tiene un préstamo para el mismo libro.
+     * @throws PrestamoDuplicadoException Si el usuario ya tiene un préstamo para el
+     *                                    mismo libro.
      */
     public void prestamoRepetido(PrestamoDto prestamoDto) {
         Libro libro = prestamoDto.getLibro();

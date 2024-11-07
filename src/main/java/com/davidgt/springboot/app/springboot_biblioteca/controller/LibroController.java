@@ -165,7 +165,7 @@ public class LibroController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarLibro(@Valid @RequestBody LibroDto libroDto, @PathVariable Long id) {
+    public ResponseEntity<?> actualizarLibro(@RequestBody LibroDto libroDto, @PathVariable Long id) {
         LibroDto libro = libroService.actualizarLibro(libroDto, id);
         return ResponseEntity.status(HttpStatus.OK).body(libro);
     }

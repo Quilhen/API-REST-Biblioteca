@@ -66,7 +66,6 @@ public class PrestamoDto {
         this.estado = estado;
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -76,6 +75,7 @@ public class PrestamoDto {
         result = prime * result + ((libro == null) ? 0 : libro.hashCode());
         result = prime * result + ((fechaPrestamo == null) ? 0 : fechaPrestamo.hashCode());
         result = prime * result + ((fechaDevolucionPrevista == null) ? 0 : fechaDevolucionPrevista.hashCode());
+        result = prime * result + ((estado == null) ? 0 : estado.hashCode());
         return result;
     }
 
@@ -113,8 +113,13 @@ public class PrestamoDto {
                 return false;
         } else if (!fechaDevolucionPrevista.equals(other.fechaDevolucionPrevista))
             return false;
+        if (estado != other.estado)
+            return false;
         return true;
     }
+
+
+  
 
     
 }

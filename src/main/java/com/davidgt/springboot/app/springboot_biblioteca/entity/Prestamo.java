@@ -30,7 +30,7 @@ public class Prestamo {
     private Libro libro;
 
     private LocalDate fechaPrestamo;
-    private LocalDate fechaDevolucionPrevista; //Fecha prevista de devolución.
+    private LocalDate fechaDevolucionPrevista; // Fecha prevista de devolución.
 
     @Enumerated(EnumType.STRING)
     private EstadoPrestamo estado = EstadoPrestamo.ACTIVO;
@@ -95,6 +95,7 @@ public class Prestamo {
         result = prime * result + ((libro == null) ? 0 : libro.hashCode());
         result = prime * result + ((fechaPrestamo == null) ? 0 : fechaPrestamo.hashCode());
         result = prime * result + ((fechaDevolucionPrevista == null) ? 0 : fechaDevolucionPrevista.hashCode());
+        result = prime * result + ((estado == null) ? 0 : estado.hashCode());
         return result;
     }
 
@@ -131,6 +132,8 @@ public class Prestamo {
             if (other.fechaDevolucionPrevista != null)
                 return false;
         } else if (!fechaDevolucionPrevista.equals(other.fechaDevolucionPrevista))
+            return false;
+        if (estado != other.estado)
             return false;
         return true;
     }
