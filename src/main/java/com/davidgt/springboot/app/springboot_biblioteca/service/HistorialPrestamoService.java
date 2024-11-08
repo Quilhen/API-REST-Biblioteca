@@ -42,7 +42,6 @@ public class HistorialPrestamoService {
     @Transactional
     public void crearHistorialPrestamo(Prestamo prestamo){
         HistorialPrestamo historialPrestamo = new HistorialPrestamo();
-        historialPrestamo.setId(prestamo.getId());
         historialPrestamo.setUsuario(prestamo.getUsuario());
         historialPrestamo.setLibro(prestamo.getLibro());
         historialPrestamo.setFechaPrestamo(prestamo.getFechaPrestamo());
