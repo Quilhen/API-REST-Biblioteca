@@ -4,7 +4,16 @@
 LibManage API es una API RESTful desarrollada con Spring Boot para gestionar bibliotecas, incluyendo autenticación JWT, control de acceso por roles, y operaciones CRUD completas para usuarios, libros, préstamos y reservas.
 
 ## Objetivo
-Este proyecto ha sido desarrollado con la intención de demostrar mis habilidades en el desarrollo de APIs seguras y eficientes con Spring Boot, enfocado en la autenticación y autorización de usuarios con control de roles.
+Este proyecto ha sido desarrollado con la intención de demostrar mis habilidades en el desarrollo de APIs seguras y eficientes con Spring Boot, enfocandome en la autenticación y autorización de usuarios con control de roles.
+
+## Tecnologías usadas
+- **Java 17**
+- **Spring Boot**
+- **Spring Security & JWT**
+- **JPA / Hibernate** para el acceso a datos.
+- **MySQL** como base de datos.
+- **Swagger** para documentación de la API.
+- **JUnit y Mockito** para pruebas unitarias.
 
 ## Características Principales
 - **Autenticación y autorización**: Seguridad mediante **JWT**.
@@ -25,15 +34,6 @@ Este proyecto ha sido desarrollado con la intención de demostrar mis habilidade
 - **Security**: Configuración de seguridad y autenticación JWT.
 - **Service**: Lógica de negocio.
 - **Tests**: Pruebas unitarias.
-
-## Tecnologias usadas
-- **Java 17**
-- **Spring Boot**
-- **Spring Security & JWT**
-- **JPA / Hibernate** para el acceso a datos.
-- **MySQL** como base de datos.
-- **Swagger** para documentación de la API.
-- **JUnit y Mockito** para pruebas unitarias.
 
 ## Requisitos
 
@@ -149,6 +149,7 @@ El proyecto incluye pruebas unitarias utilizando **JUnit** y **Mockito** para va
 
 - **Pruebas de Servicios**: Validan que la lógica de negocio funcione como se espera en los servicios principales.
 - **Pruebas de Controlador y Configuración**: Verifican el comportamiento de un controlador clave y la configuración de seguridad.
+- **Pruebas de Mappers**: Aseguran la conversión correcta entre entidades y DTOs.
 
 ## Contacto
 
