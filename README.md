@@ -13,7 +13,7 @@ Este proyecto ha sido desarrollado con la intención de demostrar mis habilidade
   - **USER**: Acceso limitado a consulta y préstamos.
 - **Operaciones CRUD**: Gestión completa de usuarios, libros, préstamos, reservas e historial de préstamos.
 - **Swagger UI**: Documentación interactiva para explorar la API.
-- **Pruebas**: Cubre las pruebas unitarias e integración en varias capas.
+- **Pruebas**: Cubre las pruebas unitarias en varias capas.
 
 ## Estructura del Proyecto
 - **Controller**: Controladores de solicitudes HTTP.
@@ -24,7 +24,7 @@ Este proyecto ha sido desarrollado con la intención de demostrar mis habilidade
 - **Repository**: Interfaces de comunicación con la base de datos.
 - **Security**: Configuración de seguridad y autenticación JWT.
 - **Service**: Lógica de negocio.
-- **Tests**: Pruebas unitarias e integración.
+- **Tests**: Pruebas unitarias.
 
 ## Tecnologias usadas
 - **Java 17**
@@ -142,6 +142,13 @@ A continuación, algunos ejemplos de cómo utilizar las rutas de la API (puedes 
 La API utiliza JWT para autenticación. Cada solicitud a un endpoint protegido requiere un token JWT válido en el encabezado ``Authorization``.
 - **ADMIN**: Acceso completo a todos los endpoints.
 - **USER**: Acceso restringido a endpoints de consulta y préstamos de libros.
+
+## Pruebas Unitarias
+
+El proyecto incluye pruebas unitarias utilizando **JUnit** y **Mockito** para validar la funcionalidad de las partes más importantes de la aplicación:
+
+- **Pruebas de Servicios**: Validan que la lógica de negocio funcione como se espera en los servicios principales.
+- **Pruebas de Controlador y Configuración**: Verifican el comportamiento de un controlador clave y la configuración de seguridad.
 
 ## Contacto
 
