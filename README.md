@@ -6,7 +6,7 @@ LibManage API es una API RESTful desarrollada con Spring Boot para gestionar bib
 ## Objetivo
 Este proyecto ha sido desarrollado con la intención de demostrar mis habilidades en el desarrollo de APIs seguras y eficientes con Spring Boot, enfocandome en la autenticación y autorización de usuarios con control de roles.
 
-## Tecnologías usadas
+## Tecnologías Usadas
 - **Java 17**
 - **Spring Boot**
 - **Spring Security & JWT**
@@ -64,8 +64,6 @@ Antes de ejecutar el proyecto, asegúrate de contar con:
    mvn spring-boot:run
    ```
 
-4. Accede a la documentación de Swagger en: [Swagger UI](http://localhost:8080/doc/swagger-ui/index.html)
-
 ## Ejecución con Docker
 Para facilitar la ejecución del proyecto, puedes usar Docker y Docker Compose para iniciar la API y la base de datos MySQL sin configuraciones adicionales.
 
@@ -74,12 +72,15 @@ Para facilitar la ejecución del proyecto, puedes usar Docker y Docker Compose p
    docker-compose up -d
    ```
 
-2. La API estará disponible en http://localhost:8080, y la documentación de Swagger en: [Swagger UI](http://localhost:8080/doc/swagger-ui/index.html)
-
-3. Para detener y eliminar los contenedores, ejecuta:
+2. Para detener y eliminar los contenedores, ejecuta:
    ```bash
    docker-compose down
    ```
+
+## Acceso a la Documentación de la API
+La documentación completa de la API está disponible en **Swagger UI**, donde puedes explorar y probar los endpoints protegidos con autenticación JWT:
+
+- [Swagger UI](http://localhost:8080/doc/swagger-ui/index.html)
 
 ## Funcionalidades de la API
 
