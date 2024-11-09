@@ -66,6 +66,21 @@ Antes de ejecutar el proyecto, asegúrate de contar con:
 
 4. Accede a la documentación de Swagger en: [Swagger UI](http://localhost:8080/doc/swagger-ui/index.html)
 
+## Ejecución con Docker
+Para facilitar la ejecución del proyecto, puedes usar Docker y Docker Compose para iniciar la API y la base de datos MySQL sin configuraciones adicionales.
+
+1. Construye y ejecuta los contenedores: Desde el directorio raíz del proyecto, ejecuta:
+   ```bash
+   docker-compose up -d
+   ```
+
+2. La API estará disponible en http://localhost:8080, y la documentación de Swagger en: [Swagger UI](http://localhost:8080/doc/swagger-ui/index.html)
+
+3. Para detener y eliminar los contenedores, ejecuta:
+   ```bash
+   docker-compose down
+   ```
+
 ## Funcionalidades de la API
 
 ### **Autenticación de Usuarios (JWT)**

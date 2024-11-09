@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 @RestController
-@Tag(name = "Historial de prestamos", description = "Muestra el historial de todos los prestamos hechos.")
+@Tag(name = "Historial de prestamos", description = "Muestra el historial de todos los préstamos hechos.")
 @RequestMapping("/api/historialPrestamos")
 public class HistorialPrestamoController {
 

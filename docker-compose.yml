@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_biblioteca
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bd_biblioteca
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: contraseña
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot_biblioteca
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bd_biblioteca
+      SPRING_DATASOURCE_USERNAME: usuario
+      SPRING_DATASOURCE_PASSWORD: contraseña
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:
+    driver: local

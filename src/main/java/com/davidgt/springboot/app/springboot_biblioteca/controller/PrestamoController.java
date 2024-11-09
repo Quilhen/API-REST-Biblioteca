@@ -33,7 +33,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/prestamos")
-@Tag(name = "Prestamos", description = "Operaciones relacionadas con los prestamos.")
+@Tag(name = "Préstamos", description = "Operaciones relacionadas con los préstamos.")
 public class PrestamoController {
 
     @Autowired
@@ -103,7 +103,7 @@ public class PrestamoController {
      * Requiere autenticación con rol ADMIN.
      * 
      * @param id El ID del préstamo que se desea marcar como devuelto.
-     * @return El prestamo en formato PrestamoDto.
+     * @return El préstamo en formato PrestamoDto.
      */
     @Operation(summary = "Marcar préstamo como devuelto", description = "Marca un préstamo existente como devuelto.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
