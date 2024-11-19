@@ -1,43 +1,42 @@
 
-# LibManage API
+# Library Management API
 
-LibManage API es una API RESTful desarrollada con Spring Boot para gestionar bibliotecas, incluyendo autenticación JWT, control de acceso por roles, y operaciones CRUD completas para usuarios, libros, préstamos y reservas.
+**Library Management API** es una API RESTful desarrollada con **Spring Boot** para gestionar bibliotecas. Incluye autenticación JWT, control de acceso por roles, y operaciones CRUD completas para usuarios, libros, préstamos y reservas.
+
 
 ## Objetivo
 Este proyecto ha sido desarrollado con la intención de demostrar mis habilidades en el desarrollo de APIs seguras y eficientes con Spring Boot, enfocandome en la autenticación y autorización de usuarios con control de roles.
 
 ## Tecnologías Usadas
-- **Java 17**
-- **Spring Boot**
-- **Spring Security & JWT**
-- **JPA / Hibernate** para el acceso a datos.
-- **MySQL** como base de datos.
-- **Swagger** para documentación de la API.
-- **JUnit y Mockito** para pruebas unitarias.
+- 💻 **Lenguaje:** Java 17  
+- 🚀 **Framework:** Spring Boot, Spring Security & JWT  
+- 📦 **Acceso a datos:** JPA (Hibernate)  
+- 🗄️ **Base de datos:** MySQL  
+- 📝 **Documentación:** Swagger  
+- 🔍 **Pruebas:** JUnit y Mockito  
+- 🛠️ **Otros:** Docker
 
 ## Características Principales
-- **Autenticación y autorización**: Seguridad mediante **JWT**.
-- **Control de Acceso**:
-  - **ADMIN**: Acceso completo para la gestión de usuarios, libros, y préstamos.
-  - **USER**: Acceso limitado a consulta y préstamos.
-- **Operaciones CRUD**: Gestión completa de usuarios, libros, préstamos, reservas e historial de préstamos.
-- **Swagger UI**: Documentación interactiva para explorar la API.
-- **Pruebas**: Cubre las pruebas unitarias en varias capas.
+- **Autenticación JWT**: Roles de usuario (`ADMIN`, `USER`).
+- **Operaciones CRUD**: Usuarios, libros, préstamos, reservas e historial.
+- **Swagger UI**: Documentación interactiva de la API.
+- **Pruebas unitarias**: Servicios, controladores y mappers.
 
 ## Estructura del Proyecto
-- **Controller**: Controladores de solicitudes HTTP.
-- **Dto**: Clases para el formato de entrada y salida de datos.
-- **Entity**: Modelos que representan las tablas de la base de datos.
-- **Exception**: Manejo de excepciones personalizadas.
-- **Mapper**: Conversión entre `Dto` y `Entity`.
-- **Repository**: Interfaces de comunicación con la base de datos.
-- **Security**: Configuración de seguridad y autenticación JWT.
-- **Service**: Lógica de negocio.
-- **Tests**: Pruebas unitarias.
+| Carpeta        | Descripción                                     |
+|----------------|-------------------------------------------------|
+| `Controller`   | Controladores de solicitudes HTTP.              |
+| `Dto`          | Clases para el formato de entrada y salida.     |
+| `Entity`       | Modelos que representan las tablas de la BD.    |
+| `Exception`    | Manejo de excepciones personalizadas.           |
+| `Mapper`       | Conversión entre DTO y Entity.                  |
+| `Repository`   | Interfaces para comunicación con la base de datos. |
+| `Security`     | Configuración de seguridad y autenticación JWT. |
+| `Service`      | Lógica de negocio.                              |
+| `Tests`        | Pruebas unitarias.                              |
 
-## Requisitos
+## Requisitos Previos
 
-Antes de ejecutar el proyecto, asegúrate de contar con:
 - **Java 17** o superior
 - **Maven 3.6+**
 - **MySQL** configurado y en ejecución
@@ -65,7 +64,7 @@ Antes de ejecutar el proyecto, asegúrate de contar con:
    ```
 
 ## Ejecución con Docker
-Para facilitar la ejecución del proyecto, puedes usar Docker y Docker Compose para iniciar la API y la base de datos MySQL sin configuraciones adicionales.
+Si prefieres usar Docker para facilitar la configuración, ejecuta los contenedores:
 
 1. Construye y ejecuta los contenedores: Desde el directorio raíz del proyecto, ejecuta:
    ```bash
